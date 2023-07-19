@@ -20,6 +20,3 @@ const Ship = (length) => {
     isSunk,
   };
 };
-
-const carrier = Ship(5);
-carrier.hit();
