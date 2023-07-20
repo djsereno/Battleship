@@ -1,15 +1,24 @@
-const Ship = (length) => {
-  const size = length;
-  let damage = 0;
+const Ship = (size) => {
+  const _size = size;
+  let _damage = 0;
 
-  const isSunk = () => damage === size;
+  const isSunk = () => _damage === _size;
   const hit = () => {
     if (isSunk()) return undefined;
-    damage += 1;
+    _damage += 1;
     return isSunk();
   };
 
-  return { hit, isSunk };
+  return {
+    hit,
+    isSunk,
+    get size() {
+      return _size;
+    },
+    get damage() {
+      return _damage;
+    },
+  };
 };
 
 module.exports = Ship;
