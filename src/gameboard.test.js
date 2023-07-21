@@ -1,6 +1,6 @@
 const Gameboard = require('./gameboard');
 
-const gameboard = Gameboard(3);
+const gameboard = Gameboard(10);
 
 test('Gameboard array', () => {
   for (let i = 0; i < gameboard.size; i++) {
@@ -17,13 +17,9 @@ describe.each([
   [4, [0, 6], 'V', true],
   [3, [8, 8], 'V', false],
   [3, [8, 8], 'H', false],
-  [3, [7, 8], 'H', true],
-])();
-
-
-test('Place 5 long ship horizontally at 1, 1', () => {
-  expect(gameboard.checkPlacement(5, [1, 1], 'horiz')).toBe(true);
-});
-test('Place 4 long ship vertically at 0, 1', () => {
-  expect(gameboard.checkPlacement((4)[(1, 1)], 'vert')).toBe(true);
+  [3, [8, 7], 'H', true],
+])('Ship placement: ', (size, coord, dir, expected) => {
+  test(`${size} long at ${coord} (${dir}) returns ${expected}`, () => {
+    expect(gameboard.placeShip(size, coord, dir)).toBe(expected);
+  });
 });
