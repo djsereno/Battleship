@@ -1,6 +1,6 @@
 const Ship = require('../ship');
 
-const ship = Ship(3);
+const ship = Ship('SUB');
 
 describe('Testing hits', () => {
   beforeEach(() => ship.hit());

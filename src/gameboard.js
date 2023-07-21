@@ -2,33 +2,35 @@ const Ship = require('./ship');
 
 const Gameboard = (size) => {
   const _size = size;
+  const _ships = {
+    CAR: undefined,
+    BAT: undefined,
+    CRU: undefined,
+    SUB: undefined,
+    DES: undefined,
+  };
   const _board = Array(_size)
     .fill(0)
     .map((row) => Array(_size).fill({ state: 0 }));
 
-  // TODO: Probably makes more sense for this to be in the Ship factory function
-  const SHIPS = {
-    CAR: 5,
-    BAT: 4,
-    CRU: 3,
-    SUB: 3,
-    DES: 2,
+  const checkValidCell = (coord) => {
+    let [row, col] = coord;
+    return row >= 0 && row < _size && col >= 0 && col < _size;
   };
 
-  const checkPlacement = (size, startCoord, direction) => {
+  const checkValidShip = (size, startCoord, direction) => {
     let [row, col] = startCoord;
     for (let i = 0; i < size; i++) {
-      if (row < 0 || row >= _size || col < 0 || col >= _size) return false;
-      if (_board[row][col].ship) return false;
+      if (!checkValidCell([row, col]) || _board[row][col].ship) return false;
       direction === 'H' ? col++ : row++;
     }
     return true;
   };
 
-  const placeShip = (shipName, startCoord, direction) => {
-    const size = SHIPS[shipName];
-    const ship = Ship(size);
-    if (!checkPlacement(size, startCoord, direction)) return false;
+  const placeShip = (name, startCoord, direction) => {
+    const ship = Ship(name);
+    const size = ship.size;
+    if (!checkValidShip(size, startCoord, direction)) return false;
 
     let [row, col] = startCoord;
     for (let i = 0; i < size; i++) {

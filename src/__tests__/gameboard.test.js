@@ -26,9 +26,9 @@ describe.each([
   ['DES', [0, 4], 'H', true],
   ['SUB', [-1, 7], 'H', false],
   ['SUB', [4, 4], 'V', true],
-])('Ship placement: ', (size, coord, dir, expected) => {
-  test(`${size} long at ${coord} (${dir}) returns ${expected}`, () => {
-    expect(gameboard.placeShip(size, coord, dir)).toBe(expected);
+])('Ship placement: ', (ship, coord, dir, expected) => {
+  test(`${ship} long at ${coord} (${dir}) returns ${expected}`, () => {
+    expect(gameboard.placeShip(ship, coord, dir)).toBe(expected);
   });
 });
 
