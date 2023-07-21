@@ -10,8 +10,12 @@ const Gameboard = (size) => {
     DES: undefined,
   };
   const _board = Array(_size)
-    .fill(0)
-    .map((row) => Array(_size).fill({ state: 0 }));
+    .fill()
+    .map(() =>
+      Array(_size)
+        .fill()
+        .map(() => ({ state: 0 })),
+    );
 
   const checkValidCell = (coord) => {
     let [row, col] = coord;
