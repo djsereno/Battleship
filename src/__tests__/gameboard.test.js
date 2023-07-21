@@ -1,4 +1,4 @@
-const Gameboard = require('./gameboard');
+const Gameboard = require('../gameboard');
 
 const gameboard = Gameboard(10);
 
