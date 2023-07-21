@@ -4,7 +4,9 @@ const Gameboard = (size) => {
   const _size = size;
   const _board = Array(_size)
     .fill(0)
-    .map((row) => Array(_size).fill(0));
+    .map((row) => Array(_size).fill({ state: 0 }));
+
+  // TODO: Probably makes more sense for this to be in the Ship factory function
   const SHIPS = {
     CAR: 5,
     BAT: 4,
@@ -17,7 +19,7 @@ const Gameboard = (size) => {
     let [row, col] = startCoord;
     for (let i = 0; i < size; i++) {
       if (row < 0 || row >= _size || col < 0 || col >= _size) return false;
-      if (_board[row][col]) return false;
+      if (_board[row][col].ship) return false;
       direction === 'H' ? col++ : row++;
     }
     return true;
@@ -30,14 +32,26 @@ const Gameboard = (size) => {
 
     let [row, col] = startCoord;
     for (let i = 0; i < size; i++) {
-      _board[row][col] = { state: 1, ship: ship };
+      _board[row][col] = { state: 0, ship: ship };
       direction === 'H' ? col++ : row++;
     }
     return true;
   };
 
+  const receiveAttack = (coord) => {
+    let [row, col] = coord;
+    let cell = _board[row][col];
+    if (cell.ship === undefined) {
+      cell.state = -1;
+      return false;
+    }
+    cell.state = 1;
+    return true;
+  };
+
   return {
     placeShip,
+    receiveAttack,
     get size() {
       return _size;
     },
