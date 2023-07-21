@@ -59,9 +59,24 @@ const Gameboard = (size) => {
     return true;
   };
 
+  const prettyPrint = () => {
+    let arr = _board.map((row) => {
+      let filteredRow = row.map((cell) => {
+        if (cell.state === 1) return 'X';
+        if (cell.state === -1) return 'O';
+        if (cell.state === 0 && cell.ship) return cell.ship.size;
+        return ' ';
+      });
+      return filteredRow;
+    });
+    console.table(arr);
+    return arr;
+  };
+
   return {
     placeShip,
     receiveAttack,
+    prettyPrint,
     get size() {
       return _size;
     },
