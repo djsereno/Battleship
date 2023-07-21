@@ -48,12 +48,12 @@ const Gameboard = (size) => {
     if (!checkValidCell(coord)) return undefined;
     let [row, col] = coord;
     let cell = _board[row][col];
-    if (_board[row][col].ship === undefined) {
-      _board[row][col].state = -1;
+    if (cell.ship === undefined) {
+      cell.state = -1;
       return false;
     }
-    _board[row][col].state = 1;
-    _board[row][col].ship.hit();
+    cell.state = 1;
+    cell.ship.hit();
     return true;
   };
 
