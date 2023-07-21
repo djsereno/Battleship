@@ -45,13 +45,17 @@ const Gameboard = (size) => {
   };
 
   const receiveAttack = (coord) => {
+    if (!checkValidCell(coord)) return undefined;
     let [row, col] = coord;
     let cell = _board[row][col];
-    if (cell.ship === undefined) {
-      cell.state = -1;
+    if (_board[row][col].ship === undefined) {
+      _board[row][col].state = -1;
       return false;
     }
-    cell.state = 1;
+    _board[row][col].state = 1;
+    _board[row][col].ship.hit();
+
+    prettyPrint();
     return true;
   };
 

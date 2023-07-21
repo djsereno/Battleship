@@ -41,25 +41,39 @@ const setupTestBoard = () => {
 };
 
 describe.each([
+  [[-1, 1], undefined, -1],
+  [[10, 1], undefined, -1],
   [[0, 0], false, -1],
   [[0, 1], false, -1],
   [[0, 2], false, -1],
   [[0, 3], false, -1],
-  [[0, 4], true, 1],
-  [[0, 5], true, 1],
-  [[0, 6], true, 1],
+  [[0, 4], true, 1, 1, false],
+  [[0, 5], true, 1, 2, true],
+  [[0, 6], true, 1, 1, false],
   [[0, 7], false, -1],
-  [[5, 4], true, 1],
-  [[6, 4], true, 1],
-  [[7, 4], false, -1],
-])('Attack: ', (coord, hit, state) => {
+  [[4, 4], true, 1, 1, false],
+  [[5, 4], true, 1, 2, false],
+  [[6, 4], true, 1, 3, true],
+])('Attack: ', (coord, hit, state, damage, isSunk) => {
   beforeAll(setupTestBoard);
+  let [row, col] = coord;
 
   test(`Attack ${coord} returns ${hit}`, () => {
     expect(gameboard.receiveAttack(coord)).toBe(hit);
   });
-  test(`Board cell state is ${state}`, () => {
-    let [row, col] = coord;
-    expect(gameboard.board[row][col].state).toBe(state);
-  });
+
+  if (hit !== undefined) {
+    test(`Board cell state is ${state}`, () => {
+      expect(gameboard.board[row][col].state).toBe(state);
+    });
+  }
+
+  if (hit) {
+    test(`Damage is ${damage}`, () => {
+      expect(gameboard.board[row][col].ship.damage).toBe(damage);
+    });
+    test(`isSunk is ${isSunk}`, () => {
+      expect(gameboard.board[row][col].ship.isSunk()).toBe(isSunk);
+    });
+  }
 });
