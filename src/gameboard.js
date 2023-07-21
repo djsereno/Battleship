@@ -1,6 +1,8 @@
 const Gameboard = (size) => {
   const _size = size;
-  const _board = Array(size).fill(Array(size).fill(0));
+  const _board = Array(_size)
+    .fill(0)
+    .map((row) => Array(_size).fill(0));
 
   const checkPlacement = (size, startCoord, direction) => {
     let [row, col] = startCoord;
