@@ -33,6 +33,15 @@ describe.each([
   });
 });
 
+describe.each(['CAR', 'BAT', 'CRU', 'SUB', 'DES'])('Ships exist and are not sunk:', (ship) => {
+  test(`${ship} is defined`, () => {
+    expect(gameboard.ships[ship]).toBeDefined();
+  });
+  test(`${ship} is not sunk`, () => {
+    expect(gameboard.ships[ship].isSunk()).toBe(false);
+  });
+});
+
 describe.each([
   [[-1, 1], undefined, -1],
   [[10, 1], undefined, -1],

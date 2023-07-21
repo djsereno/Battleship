@@ -41,6 +41,7 @@ const Gameboard = (size) => {
       _board[row][col] = { state: 0, ship: ship };
       direction === 'H' ? col++ : row++;
     }
+    _ships[name] = ship;
     return true;
   };
 
@@ -80,6 +81,9 @@ const Gameboard = (size) => {
     },
     get board() {
       return _board;
+    },
+    get ships() {
+      return _ships;
     },
   };
 };
