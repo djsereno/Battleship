@@ -18,7 +18,7 @@ const Gameboard = (size) => {
     if (!checkPlacement(size, startCoord, direction)) return false;
     let [row, col] = startCoord;
     for (let i = 0; i < size; i++) {
-      _board[row][col] = 1;
+      _board[row][col] = size;
       direction === 'H' ? col++ : row++;
     }
     return true;
