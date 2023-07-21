@@ -1,12 +1,13 @@
 const Gameboard = require('../gameboard');
 
 const gameboard = Gameboard(10);
+afterAll(() => gameboard.prettyPrint());
 
-describe("Gameboard array is all 0's", () => {
+describe('Board initialization:', () => {
   for (let i = 0; i < gameboard.size; i++) {
     for (let j = 0; j < gameboard.size; j++) {
       test(`${i},${j} to be 0`, () => {
-        expect(gameboard.board[i][j].state).toBe(0);
+        expect(gameboard.board[i][j]).toEqual({ state: 0 });
       });
     }
   }
@@ -26,19 +27,11 @@ describe.each([
   ['DES', [0, 4], 'H', true],
   ['SUB', [-1, 7], 'H', false],
   ['SUB', [4, 4], 'V', true],
-])('Ship placement: ', (ship, coord, dir, expected) => {
+])('Ship placement:', (ship, coord, dir, expected) => {
   test(`${ship} long at ${coord} (${dir}) returns ${expected}`, () => {
     expect(gameboard.placeShip(ship, coord, dir)).toBe(expected);
   });
 });
-
-const setupTestBoard = () => {
-  gameboard.placeShip('CAR', [1, 1], 'H');
-  gameboard.placeShip('BAT', [0, 6], 'V');
-  gameboard.placeShip('CRU', [8, 7], 'H');
-  gameboard.placeShip('DES', [0, 4], 'H');
-  gameboard.placeShip('SUB', [4, 4], 'V');
-};
 
 describe.each([
   [[-1, 1], undefined, -1],
@@ -54,8 +47,7 @@ describe.each([
   [[4, 4], true, 1, 1, false],
   [[5, 4], true, 1, 2, false],
   [[6, 4], true, 1, 3, true],
-])('Attack: ', (coord, hit, state, damage, isSunk) => {
-  beforeAll(setupTestBoard);
+])('Attacks:', (coord, hit, state, damage, isSunk) => {
   let [row, col] = coord;
 
   test(`Attack ${coord} returns ${hit}`, () => {

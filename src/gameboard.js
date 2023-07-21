@@ -54,8 +54,6 @@ const Gameboard = (size) => {
     }
     _board[row][col].state = 1;
     _board[row][col].ship.hit();
-
-    prettyPrint();
     return true;
   };
 
