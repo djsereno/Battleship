@@ -1,4 +1,5 @@
 import Gameboard from './gameboard';
+import { SHIP_KEYS } from './globals';
 
 function randomInt(int) {
   return Math.floor(Math.random() * int);
@@ -9,9 +10,8 @@ const Player = (ai = true) => {
   const gameboard = Gameboard();
 
   const initBoard = () => {
-    const ships = ['CAR', 'BAT', 'CRU', 'SUB', 'DES'];
     if (isAI) {
-      ships.forEach((ship) => {
+      SHIP_KEYS.forEach((ship) => {
         let valid = false;
         do {
           const row = randomInt(10);

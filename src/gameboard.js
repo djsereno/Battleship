@@ -1,14 +1,9 @@
 import Ship from './ship';
+import { SHIP_KEYS } from './globals';
 
 const Gameboard = (dimension = 10) => {
   const size = dimension;
-  const ships = {
-    CAR: undefined,
-    BAT: undefined,
-    CRU: undefined,
-    SUB: undefined,
-    DES: undefined,
-  };
+  const ships = Object.fromEntries(SHIP_KEYS.map((ship) => [ship, undefined]));
   const board = Array(size)
     .fill()
     .map(() =>

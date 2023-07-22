@@ -1,14 +1,8 @@
-const SHIPS = {
-  CAR: 5,
-  BAT: 4,
-  CRU: 3,
-  SUB: 3,
-  DES: 2,
-};
+import { SHIP_SIZES } from './globals';
 
 const Ship = (name) => {
-  if (!(name in SHIPS)) return false;
-  const size = SHIPS[name];
+  if (!(name in SHIP_SIZES)) return false;
+  const size = SHIP_SIZES[name];
   let damage = 0;
 
   const isSunk = () => damage === size;

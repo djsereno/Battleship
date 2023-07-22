@@ -1,6 +1,7 @@
 import Gameboard from '../gameboard';
+import { SHIP_KEYS } from '../globals';
 
-const gameboard = Gameboard(10);
+const gameboard = Gameboard();
 afterAll(() => gameboard.prettyPrint('Gameboard tests:'));
 
 describe('Board initialization:', () => {
@@ -33,7 +34,7 @@ describe.each([
   });
 });
 
-describe.each(['CAR', 'BAT', 'CRU', 'SUB', 'DES'])('Ships exist and are not sunk:', (ship) => {
+describe.each(SHIP_KEYS)('Ships exist and are not sunk:', (ship) => {
   test(`${ship} is defined`, () => {
     expect(gameboard.ships[ship]).toBeDefined();
   });

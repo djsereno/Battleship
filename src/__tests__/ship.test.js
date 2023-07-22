@@ -1,4 +1,5 @@
 import Ship from '../ship';
+// import { SHIPS, SHIP_SIZES } from '../globals';
 
 const ship = Ship('SUB');
 

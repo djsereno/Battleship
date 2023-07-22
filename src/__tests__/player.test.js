@@ -1,4 +1,5 @@
 import Player from '../player';
+import { SHIP_KEYS } from '../globals';
 
 for (let i = 0; i < 10; i += 1) {
   describe(`Test randopm player ${i}:`, () => {
@@ -11,7 +12,7 @@ for (let i = 0; i < 10; i += 1) {
     });
 
     player.initBoard();
-    describe.each(['CAR', 'BAT', 'CRU', 'SUB', 'DES'])('All ships are placed:', (ship) => {
+    describe.each(SHIP_KEYS)('All ships are placed:', (ship) => {
       test(`${ship} is defined`, () => {
         expect(player.board.ships[ship]).toBeDefined();
       });
