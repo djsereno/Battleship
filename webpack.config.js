@@ -1,8 +1,7 @@
-// const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const config = {
   mode: 'development',
@@ -46,7 +45,7 @@ const config = {
       template: 'src/index.html',
       favicon: 'src/images/favicon.png',
     }),
-    new LodashModuleReplacementPlugin(),
+    new ESLintPlugin(),
   ],
 };
 
