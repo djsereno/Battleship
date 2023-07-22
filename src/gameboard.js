@@ -60,6 +60,14 @@ const Gameboard = (dimension) => {
     return true;
   };
 
+  const checkGameOver = () => {
+    let gameOver = true;
+    Object.keys(ships).forEach((ship) => {
+      if (!ships[ship].isSunk()) gameOver = false;
+    });
+    return gameOver;
+  };
+
   const prettyPrint = () => {
     const arr = board.map((row) => {
       const filteredRow = row.map((cell) => {
@@ -78,6 +86,7 @@ const Gameboard = (dimension) => {
     placeShip,
     receiveAttack,
     prettyPrint,
+    checkGameOver,
     get size() {
       return size;
     },

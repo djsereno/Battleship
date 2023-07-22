@@ -45,17 +45,25 @@ describe.each(['CAR', 'BAT', 'CRU', 'SUB', 'DES'])('Ships exist and are not sunk
 describe.each([
   [[-1, 1], undefined, -1],
   [[10, 1], undefined, -1],
-  [[0, 0], false, -1],
-  [[0, 1], false, -1],
-  [[0, 2], false, -1],
   [[0, 3], false, -1],
   [[0, 4], true, 1, 1, false],
   [[0, 5], true, 1, 2, true],
   [[0, 6], true, 1, 1, false],
   [[0, 7], false, -1],
+  [[1, 6], true, 1, 2, false],
+  [[2, 6], true, 1, 3, false],
+  [[3, 6], true, 1, 4, true],
   [[4, 4], true, 1, 1, false],
   [[5, 4], true, 1, 2, false],
   [[6, 4], true, 1, 3, true],
+  [[8, 7], true, 1, 1, false],
+  [[8, 8], true, 1, 2, false],
+  [[8, 9], true, 1, 3, true],
+  [[1, 0], false, -1],
+  [[1, 1], true, 1, 1, false],
+  [[1, 2], true, 1, 2, false],
+  [[1, 3], true, 1, 3, false],
+  [[1, 4], true, 1, 4, false],
 ])('Attacks:', (coord, hit, state, damage, isSunk) => {
   const [row, col] = coord;
 
@@ -77,4 +85,26 @@ describe.each([
       expect(gameboard.board[row][col].ship.isSunk()).toBe(isSunk);
     });
   }
+
+  test('Game over is false', () => {
+    expect(gameboard.checkGameOver()).toBe(false);
+  });
+});
+
+describe('Game over:', () => {
+  test(`Attack 1,5 returns true`, () => {
+    expect(gameboard.receiveAttack([1, 5])).toBe(true);
+  });
+  test(`Board cell state is 1`, () => {
+    expect(gameboard.board[1][5].state).toBe(1);
+  });
+  test(`Damage is 5`, () => {
+    expect(gameboard.board[1][5].ship.damage).toBe(5);
+  });
+  test(`isSunk is true`, () => {
+    expect(gameboard.board[1][5].ship.isSunk()).toBe(true);
+  });
+  test('Game over is true', () => {
+    expect(gameboard.checkGameOver()).toBe(true);
+  });
 });
