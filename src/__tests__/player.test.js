@@ -1,32 +1,21 @@
 import Player from '../player';
 
-const player1 = Player();
-const player2 = Player();
+for (let i = 0; i < 10; i += 1) {
+  describe(`Test randopm player ${i}:`, () => {
+    const player = Player();
+    test('Player isAI to be true', () => {
+      expect(player.isAI).toBeTruthy();
+    });
+    test('Player has a defined gameboard', () => {
+      expect(player.board).toBeDefined();
+    });
 
-describe('Player 1 tests:', () => {
-  test('Player isAI to be true', () => {
-    expect(player1.isAI).toBeTruthy();
-  });
-  test('Player has a gameboard', () => {
-    expect(player1.board).toBeTruthy();
-  });
-  describe.skip(['CAR', 'BAT', 'CRU', 'SUB', 'DES'])(
-    'Player ships are placed on board:',
-    (ship) => {
+    player.initBoard();
+    describe.each(['CAR', 'BAT', 'CRU', 'SUB', 'DES'])('All ships are placed:', (ship) => {
       test(`${ship} is defined`, () => {
-        expect(player1.gameboard.ships[ship]).toBeUndefined();
+        expect(player.board.ships[ship]).toBeDefined();
       });
-    },
-  );
-  player1.board.prettyPrint('Player 1:');
-});
-
-describe('Player 2 tests:', () => {
-  test('Player isAI to be true', () => {
-    expect(player2.isAI).toBeTruthy();
+    });
+    player.board.prettyPrint(`Player 1-${i}:`);
   });
-  test('Player has a gameboard', () => {
-    expect(player2.board).toBeTruthy();
-  });
-  player2.board.prettyPrint('Player 2:');
-});
+}
