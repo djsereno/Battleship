@@ -4,8 +4,8 @@ const gameboard = Gameboard(10);
 afterAll(() => gameboard.prettyPrint());
 
 describe('Board initialization:', () => {
-  for (let i = 0; i < gameboard.size; i++) {
-    for (let j = 0; j < gameboard.size; j++) {
+  for (let i = 0; i < gameboard.size; i += 1) {
+    for (let j = 0; j < gameboard.size; j += 1) {
       test(`${i},${j} to be 0`, () => {
         expect(gameboard.board[i][j]).toEqual({ state: 0 });
       });
@@ -57,7 +57,7 @@ describe.each([
   [[5, 4], true, 1, 2, false],
   [[6, 4], true, 1, 3, true],
 ])('Attacks:', (coord, hit, state, damage, isSunk) => {
-  let [row, col] = coord;
+  const [row, col] = coord;
 
   test(`Attack ${coord} returns ${hit}`, () => {
     expect(gameboard.receiveAttack(coord)).toBe(hit);

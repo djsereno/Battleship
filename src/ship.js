@@ -6,13 +6,13 @@ const Ship = (name) => {
     SUB: 3,
     DES: 2,
   };
-  const _size = SHIPS[name];
-  let _damage = 0;
+  const size = SHIPS[name];
+  let damage = 0;
 
-  const isSunk = () => _damage === _size;
+  const isSunk = () => damage === size;
   const hit = () => {
     if (isSunk()) return undefined;
-    _damage += 1;
+    damage += 1;
     return isSunk();
   };
 
@@ -20,10 +20,10 @@ const Ship = (name) => {
     hit,
     isSunk,
     get size() {
-      return _size;
+      return size;
     },
     get damage() {
-      return _damage;
+      return damage;
     },
   };
 };

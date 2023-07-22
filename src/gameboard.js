@@ -1,54 +1,56 @@
 const Ship = require('./ship');
 
-const Gameboard = (size) => {
-  const _size = size;
-  const _ships = {
+const Gameboard = (dimension) => {
+  const size = dimension;
+  const ships = {
     CAR: undefined,
     BAT: undefined,
     CRU: undefined,
     SUB: undefined,
     DES: undefined,
   };
-  const _board = Array(_size)
+  const board = Array(size)
     .fill()
     .map(() =>
-      Array(_size)
+      Array(size)
         .fill()
         .map(() => ({ state: 0 })),
     );
 
   const checkValidCell = (coord) => {
-    let [row, col] = coord;
-    return row >= 0 && row < _size && col >= 0 && col < _size;
+    const [row, col] = coord;
+    return row >= 0 && row < size && col >= 0 && col < size;
   };
 
-  const checkValidShip = (size, startCoord, direction) => {
+  const checkValidShip = (length, startCoord, direction) => {
     let [row, col] = startCoord;
-    for (let i = 0; i < size; i++) {
-      if (!checkValidCell([row, col]) || _board[row][col].ship) return false;
-      direction === 'H' ? col++ : row++;
+    for (let i = 0; i < length; i += 1) {
+      if (!checkValidCell([row, col]) || board[row][col].ship) return false;
+      if (direction === 'H') col += 1;
+      if (direction === 'V') row += 1;
     }
     return true;
   };
 
   const placeShip = (name, startCoord, direction) => {
     const ship = Ship(name);
-    const size = ship.size;
-    if (!checkValidShip(size, startCoord, direction)) return false;
+    const length = ship.size;
+    if (!checkValidShip(length, startCoord, direction)) return false;
 
     let [row, col] = startCoord;
-    for (let i = 0; i < size; i++) {
-      _board[row][col] = { state: 0, ship: ship };
-      direction === 'H' ? col++ : row++;
+    for (let i = 0; i < length; i += 1) {
+      board[row][col] = { state: 0, ship };
+      if (direction === 'H') col += 1;
+      if (direction === 'V') row += 1;
     }
-    _ships[name] = ship;
+    ships[name] = ship;
     return true;
   };
 
   const receiveAttack = (coord) => {
     if (!checkValidCell(coord)) return undefined;
-    let [row, col] = coord;
-    let cell = _board[row][col];
+    const [row, col] = coord;
+    const cell = board[row][col];
     if (cell.ship === undefined) {
       cell.state = -1;
       return false;
@@ -59,8 +61,8 @@ const Gameboard = (size) => {
   };
 
   const prettyPrint = () => {
-    let arr = _board.map((row) => {
-      let filteredRow = row.map((cell) => {
+    const arr = board.map((row) => {
+      const filteredRow = row.map((cell) => {
         if (cell.state === 1) return 'X';
         if (cell.state === -1) return 'O';
         if (cell.state === 0 && cell.ship) return cell.ship.size;
@@ -77,13 +79,13 @@ const Gameboard = (size) => {
     receiveAttack,
     prettyPrint,
     get size() {
-      return _size;
+      return size;
     },
     get board() {
-      return _board;
+      return board;
     },
     get ships() {
-      return _ships;
+      return ships;
     },
   };
 };
