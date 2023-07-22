@@ -5,13 +5,13 @@ const gameboard = Gameboard();
 afterAll(() => gameboard.prettyPrint('Gameboard tests:'));
 
 describe('Board initialization:', () => {
-  for (let i = 0; i < gameboard.size; i += 1) {
-    for (let j = 0; j < gameboard.size; j += 1) {
-      test(`${i},${j} to be 0`, () => {
+  test(`All squares to be 0`, () => {
+    for (let i = 0; i < gameboard.size; i += 1) {
+      for (let j = 0; j < gameboard.size; j += 1) {
         expect(gameboard.board[i][j]).toEqual({ state: 0 });
-      });
+      }
     }
-  }
+  });
 });
 
 describe.each([
@@ -35,10 +35,8 @@ describe.each([
 });
 
 describe.each(SHIP_KEYS)('Ships exist and are not sunk:', (ship) => {
-  test(`${ship} is defined`, () => {
+  test(`${ship} is defined and not sunk`, () => {
     expect(gameboard.ships[ship]).toBeDefined();
-  });
-  test(`${ship} is not sunk`, () => {
     expect(gameboard.ships[ship].isSunk()).toBe(false);
   });
 });
@@ -68,44 +66,23 @@ describe.each([
 ])('Attacks:', (coord, hit, state, damage, isSunk) => {
   const [row, col] = coord;
 
-  test(`Attack ${coord} returns ${hit}`, () => {
+  test(`Attack ${coord}`, () => {
     expect(gameboard.receiveAttack(coord)).toBe(hit);
-  });
-
-  if (hit !== undefined) {
-    test(`Board cell state is ${state}`, () => {
-      expect(gameboard.board[row][col].state).toBe(state);
-    });
-  }
-
-  if (hit) {
-    test(`Damage is ${damage}`, () => {
+    if (hit !== undefined) expect(gameboard.board[row][col].state).toBe(state);
+    if (hit) {
       expect(gameboard.board[row][col].ship.damage).toBe(damage);
-    });
-    test(`isSunk is ${isSunk}`, () => {
       expect(gameboard.board[row][col].ship.isSunk()).toBe(isSunk);
-    });
-  }
-
-  test('Game over is false', () => {
+    }
     expect(gameboard.checkGameOver()).toBe(false);
   });
 });
 
 describe('Game over:', () => {
-  test(`Attack 1,5 returns true`, () => {
+  test('Attack 1,5', () => {
     expect(gameboard.receiveAttack([1, 5])).toBe(true);
-  });
-  test(`Board cell state is 1`, () => {
     expect(gameboard.board[1][5].state).toBe(1);
-  });
-  test(`Damage is 5`, () => {
     expect(gameboard.board[1][5].ship.damage).toBe(5);
-  });
-  test(`isSunk is true`, () => {
     expect(gameboard.board[1][5].ship.isSunk()).toBe(true);
-  });
-  test('Game over is true', () => {
     expect(gameboard.checkGameOver()).toBe(true);
   });
 });
