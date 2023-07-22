@@ -1,24 +1,26 @@
 import Ship from '../ship';
-// import { SHIPS, SHIP_SIZES } from '../globals';
+import { SHIP_KEYS } from '../globals';
 
-const ship = Ship('SUB');
+describe.each(SHIP_KEYS)('Test ship creation:', (shipKey) => {
+  const ship = Ship(shipKey);
+  const { size } = ship;
 
-describe('Testing hits', () => {
-  beforeEach(() => ship.hit());
-
-  test('1 hits, sunk to be false', () => {
-    expect(ship.size).toBe(3);
-    expect(ship.damage).toBe(1);
-    expect(ship.isSunk()).toBe(false);
+  test(`${shipKey} size to be ${size}`, () => {
+    expect(ship.size).toBe(size);
   });
-  test('2 hits, sunk to be false', () => {
-    expect(ship.size).toBe(3);
-    expect(ship.damage).toBe(2);
-    expect(ship.isSunk()).toBe(false);
-  });
-  test('3 hits, sunk to be true', () => {
-    expect(ship.size).toBe(3);
-    expect(ship.damage).toBe(3);
-    expect(ship.isSunk()).toBe(true);
+
+  describe('Attack ship:', () => {
+    afterEach(() => ship.hit());
+
+    for (let i = 0; i < size; i += 1) {
+      test(`${shipKey} damage to be ${i}/${size}`, () => {
+        expect(ship.damage).toBe(i);
+        expect(ship.isSunk()).toBe(false);
+      });
+    }
+    test(`${shipKey} damage to be ${size}/${size} (sunk)`, () => {
+      expect(ship.damage).toBe(size);
+      expect(ship.isSunk()).toBe(true);
+    });
   });
 });
