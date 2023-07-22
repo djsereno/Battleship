@@ -1,7 +1,7 @@
 import Gameboard from '../gameboard';
 
 const gameboard = Gameboard(10);
-afterAll(() => gameboard.prettyPrint());
+afterAll(() => gameboard.prettyPrint('Gameboard tests:'));
 
 describe('Board initialization:', () => {
   for (let i = 0; i < gameboard.size; i += 1) {

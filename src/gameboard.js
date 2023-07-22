@@ -1,6 +1,6 @@
 import Ship from './ship';
 
-const Gameboard = (dimension) => {
+const Gameboard = (dimension = 10) => {
   const size = dimension;
   const ships = {
     CAR: undefined,
@@ -68,18 +68,20 @@ const Gameboard = (dimension) => {
     return gameOver;
   };
 
-  const prettyPrint = () => {
+  const prettyPrint = (title = '') => {
     const arr = board.map((row) => {
       const filteredRow = row.map((cell) => {
         if (cell.state === 1) return 'X';
         if (cell.state === -1) return 'O';
         if (cell.state === 0 && cell.ship) return cell.ship.size;
-        return ' ';
+        return '_';
       });
       return filteredRow;
     });
-    console.table(arr);
-    return arr;
+    let str = arr.map((row) => row.join('|')).join('\n');
+    if (title !== '') str = `${title}\n${str}`;
+    console.log(str); // eslint-disable-line
+    return str;
   };
 
   return {
