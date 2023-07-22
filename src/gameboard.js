@@ -55,6 +55,8 @@ const Gameboard = (dimension = 10) => {
     return true;
   };
 
+  const getCell = ([row, col]) => board[row][col];
+
   const checkGameOver = () => {
     let gameOver = true;
     Object.keys(ships).forEach((ship) => {
@@ -82,6 +84,7 @@ const Gameboard = (dimension = 10) => {
   return {
     placeShip,
     receiveAttack,
+    getCell,
     prettyPrint,
     checkGameOver,
     get size() {

@@ -8,7 +8,7 @@ describe('Board initialization:', () => {
   test(`All squares to be 0`, () => {
     for (let i = 0; i < gameboard.size; i += 1) {
       for (let j = 0; j < gameboard.size; j += 1) {
-        expect(gameboard.board[i][j]).toEqual({ state: 0 });
+        expect(gameboard.getCell([i, j])).toEqual({ state: 0 });
       }
     }
   });
@@ -70,8 +70,8 @@ describe.each([
     expect(gameboard.receiveAttack(coord)).toBe(hit);
     if (hit !== undefined) expect(gameboard.board[row][col].state).toBe(state);
     if (hit) {
-      expect(gameboard.board[row][col].ship.damage).toBe(damage);
-      expect(gameboard.board[row][col].ship.isSunk()).toBe(isSunk);
+      expect(gameboard.getCell([row, col]).ship.damage).toBe(damage);
+      expect(gameboard.getCell([row, col]).ship.isSunk()).toBe(isSunk);
     }
     expect(gameboard.checkGameOver()).toBe(false);
   });
@@ -80,9 +80,9 @@ describe.each([
 describe('Game over:', () => {
   test('Attack 1,5', () => {
     expect(gameboard.receiveAttack([1, 5])).toBe(true);
-    expect(gameboard.board[1][5].state).toBe(1);
-    expect(gameboard.board[1][5].ship.damage).toBe(5);
-    expect(gameboard.board[1][5].ship.isSunk()).toBe(true);
+    expect(gameboard.getCell([1, 5]).state).toBe(1);
+    expect(gameboard.getCell([1, 5]).ship.damage).toBe(5);
+    expect(gameboard.getCell([1, 5]).ship.isSunk()).toBe(true);
     expect(gameboard.checkGameOver()).toBe(true);
   });
 });
