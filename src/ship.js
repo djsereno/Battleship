@@ -30,4 +30,4 @@ const Ship = (name) => {
   };
 };
 
-module.exports = Ship;
+export default Ship;

@@ -1,4 +1,4 @@
-const Gameboard = require('../gameboard');
+import Gameboard from '../gameboard';
 
 const gameboard = Gameboard(10);
 afterAll(() => gameboard.prettyPrint());

@@ -1,4 +1,4 @@
-const Ship = require('./ship');
+import Ship from './ship';
 
 const Gameboard = (dimension) => {
   const size = dimension;
@@ -99,4 +99,4 @@ const Gameboard = (dimension) => {
   };
 };
 
-module.exports = Gameboard;
+export default Gameboard;
