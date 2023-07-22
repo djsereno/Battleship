@@ -1,11 +1,13 @@
+const SHIPS = {
+  CAR: 5,
+  BAT: 4,
+  CRU: 3,
+  SUB: 3,
+  DES: 2,
+};
+
 const Ship = (name) => {
-  const SHIPS = {
-    CAR: 5,
-    BAT: 4,
-    CRU: 3,
-    SUB: 3,
-    DES: 2,
-  };
+  if (!(name in SHIPS)) return false;
   const size = SHIPS[name];
   let damage = 0;
 

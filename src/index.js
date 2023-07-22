@@ -1,3 +1,6 @@
 const Ship = require('./ship');
 
-const ship = Ship(3);
+const ship = Ship('BAT');
+ship.hit();
+ship.hit();
+ship.hit();
