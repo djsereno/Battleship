@@ -68,15 +68,17 @@ const Gameboard = (dimension = 10) => {
   const prettyPrint = (title = '') => {
     const arr = board.map((row) => {
       const filteredRow = row.map((cell) => {
-        if (cell.state === 1) return 'X';
-        if (cell.state === -1) return 'O';
+        if (cell.state === 1) return '✔';
+        if (cell.state === -1) return 'x';
         if (cell.state === 0 && cell.ship) return cell.ship.size;
         return '_';
       });
       return filteredRow;
     });
-    let str = arr.map((row) => row.join('|')).join('\n');
-    if (title !== '') str = `${title}\n${str}`;
+
+    let str = title === '' ? '' : `${title}\n`; // title
+    str += `_|${[...Array(size).keys()].join('|')}\n`; // column indexes
+    str += arr.map((row, i) => `${i}|${row.join('|')}`).join('\n'); // rest of table
     console.log(str); // eslint-disable-line
     return str;
   };
