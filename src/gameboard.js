@@ -3,7 +3,7 @@ import { SHIP_KEYS } from './globals';
 
 const Gameboard = (dimension = 10) => {
   const size = dimension;
-  const ships = Object.fromEntries(SHIP_KEYS.map((ship) => [ship, undefined]));
+  const ships = Object.fromEntries(SHIP_KEYS.map((ship) => [ship, Ship(ship)]));
   const board = Array(size)
     .fill()
     .map(() =>
@@ -28,7 +28,7 @@ const Gameboard = (dimension = 10) => {
   };
 
   const placeShip = (name, startCoord, direction) => {
-    const ship = Ship(name);
+    const ship = ships[name];
     const length = ship.size;
     if (!checkValidShip(length, startCoord, direction)) return false;
 
@@ -38,7 +38,6 @@ const Gameboard = (dimension = 10) => {
       if (direction === 'H') col += 1;
       if (direction === 'V') row += 1;
     }
-    ships[name] = ship;
     return true;
   };
 
@@ -59,7 +58,7 @@ const Gameboard = (dimension = 10) => {
 
   const checkGameOver = () => {
     let gameOver = true;
-    Object.keys(ships).forEach((ship) => {
+    SHIP_KEYS.forEach((ship) => {
       if (!ships[ship].isSunk()) gameOver = false;
     });
     return gameOver;
