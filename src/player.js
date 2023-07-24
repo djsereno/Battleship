@@ -5,10 +5,10 @@ function randomInt(int) {
   return Math.floor(Math.random() * int);
 }
 
-const Player = (playerName, ai = true) => {
+const Player = (playerName, ai = true, boardSize = 10) => {
   const name = playerName;
   const isAI = ai;
-  const gameboard = Gameboard();
+  const gameboard = Gameboard(boardSize);
 
   const availableMoves = [];
   for (let i = 0; i < gameboard.size; i += 1) {
