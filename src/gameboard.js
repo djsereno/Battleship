@@ -4,7 +4,7 @@ import { SHIP_KEYS } from './globals';
 const Gameboard = (dimension = 10) => {
   const size = dimension;
   const ships = Object.fromEntries(SHIP_KEYS.map((ship) => [ship, Ship(ship)]));
-  const board = Array(size)
+  const array = Array(size)
     .fill()
     .map(() =>
       Array(size)
@@ -20,7 +20,7 @@ const Gameboard = (dimension = 10) => {
   const checkValidShip = (length, startCoord, direction) => {
     let [row, col] = startCoord;
     for (let i = 0; i < length; i += 1) {
-      if (!checkValidCell([row, col]) || board[row][col].ship) return false;
+      if (!checkValidCell([row, col]) || array[row][col].ship) return false;
       if (direction === 'H') col += 1;
       if (direction === 'V') row += 1;
     }
@@ -34,7 +34,7 @@ const Gameboard = (dimension = 10) => {
 
     let [row, col] = startCoord;
     for (let i = 0; i < length; i += 1) {
-      board[row][col] = { state: 0, ship };
+      array[row][col] = { state: 0, ship };
       if (direction === 'H') col += 1;
       if (direction === 'V') row += 1;
     }
@@ -44,7 +44,7 @@ const Gameboard = (dimension = 10) => {
   const receiveAttack = (coord) => {
     if (!checkValidCell(coord)) return undefined;
     const [row, col] = coord;
-    const cell = board[row][col];
+    const cell = array[row][col];
     if (cell.ship === undefined) {
       cell.state = -1;
       return false;
@@ -54,7 +54,7 @@ const Gameboard = (dimension = 10) => {
     return true;
   };
 
-  const getCell = ([row, col]) => board[row][col];
+  const getCell = ([row, col]) => array[row][col];
 
   const checkGameOver = () => {
     let gameOver = true;
@@ -65,7 +65,7 @@ const Gameboard = (dimension = 10) => {
   };
 
   const prettyPrint = (title = '') => {
-    const arr = board.map((row) => {
+    const arr = array.map((row) => {
       const filteredRow = row.map((cell) => {
         if (cell.state === 1) return '✔';
         if (cell.state === -1) return 'x';
@@ -91,8 +91,8 @@ const Gameboard = (dimension = 10) => {
     get size() {
       return size;
     },
-    get board() {
-      return board;
+    get array() {
+      return array;
     },
     get ships() {
       return ships;

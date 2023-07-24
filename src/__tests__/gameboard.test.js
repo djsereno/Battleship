@@ -6,11 +6,11 @@ afterAll(() => gameboard.prettyPrint('Gameboard tests:'));
 
 describe('Board initialization:', () => {
   test(`All squares to be 0`, () => {
-    for (let i = 0; i < gameboard.size; i += 1) {
-      for (let j = 0; j < gameboard.size; j += 1) {
-        expect(gameboard.getCell([i, j])).toEqual({ state: 0 });
-      }
-    }
+    gameboard.array.forEach((row) =>
+      row.forEach((cell) => {
+        expect(cell).toEqual({ state: 0 });
+      }),
+    );
   });
 });
 
@@ -68,7 +68,7 @@ describe.each([
 
   test(`Attack ${coord}`, () => {
     expect(gameboard.receiveAttack(coord)).toBe(hit);
-    if (hit !== undefined) expect(gameboard.board[row][col].state).toBe(state);
+    if (hit !== undefined) expect(gameboard.array[row][col].state).toBe(state);
     if (hit) {
       expect(gameboard.getCell([row, col]).ship.damage).toBe(damage);
       expect(gameboard.getCell([row, col]).ship.isSunk()).toBe(isSunk);
