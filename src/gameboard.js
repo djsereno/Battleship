@@ -45,6 +45,7 @@ const Gameboard = (dimension = 10) => {
     if (!checkValidCell(coord)) return undefined;
     const [row, col] = coord;
     const cell = array[row][col];
+    if (cell.state !== 0) return undefined;
     if (cell.ship === undefined) {
       cell.state = -1;
       return false;
