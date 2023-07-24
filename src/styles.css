@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#main {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  min-width: 400px;
+  gap: 3px;
+}
+
+.grid-cell {
+  border: 1px solid grey;
+  border-radius: 6px;
+  background-color: rgb(223, 223, 223);
+  aspect-ratio: 1;
+}
+.grid-cell:hover {
+  filter: brightness(0.9);
+  cursor: pointer;
+}
