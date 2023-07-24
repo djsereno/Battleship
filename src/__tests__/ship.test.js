@@ -1,12 +1,15 @@
 import Ship from '../ship';
-import { SHIP_KEYS } from '../globals';
+import { SHIP_KEYS, SHIP_NAMES, SHIP_SIZES } from '../globals';
 
 describe.each(SHIP_KEYS)('Test ship creation:', (shipKey) => {
   const ship = Ship(shipKey);
   const { size } = ship;
 
-  test(`${shipKey} size to be ${size}`, () => {
-    expect(ship.size).toBe(size);
+  test(`${shipKey} size to be ${SHIP_SIZES[shipKey]}`, () => {
+    expect(ship.size).toBe(SHIP_SIZES[shipKey]);
+  });
+  test(`${shipKey} name to be ${SHIP_NAMES[shipKey]}`, () => {
+    expect(ship.name).toBe(SHIP_NAMES[shipKey]);
   });
 
   describe('Attack ship:', () => {

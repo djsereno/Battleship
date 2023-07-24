@@ -1,8 +1,10 @@
-import { SHIP_SIZES } from './globals';
+import { SHIP_SIZES, SHIP_NAMES } from './globals';
 
-const Ship = (name) => {
-  if (!(name in SHIP_SIZES)) return false;
-  const size = SHIP_SIZES[name];
+const Ship = (shipKey) => {
+  if (!(shipKey in SHIP_SIZES)) return false;
+  const key = shipKey;
+  const name = SHIP_NAMES[key];
+  const size = SHIP_SIZES[key];
   let damage = 0;
 
   const isSunk = () => damage === size;
@@ -15,6 +17,12 @@ const Ship = (name) => {
   return {
     hit,
     isSunk,
+    get key() {
+      return key;
+    },
+    get name() {
+      return name;
+    },
     get size() {
       return size;
     },
