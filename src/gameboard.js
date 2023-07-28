@@ -85,6 +85,8 @@ const Gameboard = (dimension = 10) => {
 
   return {
     placeShip,
+    checkValidShip,
+    checkValidCell,
     receiveAttack,
     getCell,
     prettyPrint,

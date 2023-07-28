@@ -92,10 +92,55 @@ import Player from './player';
     }
   };
 
+  let direction = 'V';
+  let size = 5;
+
+  const previewShipPlacement = (event) => {
+    const target = event.currentTarget;
+    let [row, col] = getCellCoord(target);
+    const shipIsValid = player1.board.checkValidShip(size, [row, col], direction);
+    const [...oldCells] = player1Grid.querySelectorAll('.preview');
+
+    oldCells.forEach((cell) => cell.classList.remove('preview', 'valid', 'invalid'));
+
+    for (let i = 0; i < size; i += 1) {
+      if (!player1.board.checkValidCell([row, col])) break;
+
+      const cell = getCellDOM([row, col], player1);
+      if (shipIsValid) {
+        cell.classList.remove('invalid');
+        cell.classList.add('preview', 'valid');
+      } else {
+        cell.classList.remove('valid');
+        cell.classList.add('preview', 'invalid');
+      }
+
+      if (direction === 'H') col += 1;
+      if (direction === 'V') row += 1;
+    }
+  };
+
+  const rotateShip = (event) => {
+    event.preventDefault();
+    direction = direction === 'H' ? 'V' : 'H';
+    previewShipPlacement(event);
+  };
+
+  const clearPreview = () => {
+    const cells = player1Grid.querySelectorAll('.preview');
+    cells.forEach((cell) => cell.classList.remove('preview', 'valid', 'invalid'));
+  };
+
   player2.initBoard();
   initGridDOM('#player-1', player1);
   initGridDOM('#player-2', player2);
   updateStatus(`${attacker.name}'s turn`);
+
+  player1Grid.addEventListener('mouseleave', clearPreview);
+  player1Grid.childNodes.forEach((cell) => {
+    cell.addEventListener('mouseover', (e) => previewShipPlacement(e));
+    cell.addEventListener('contextmenu', (e) => rotateShip(e));
+  });
   player2Grid.childNodes.forEach((cell) => {
     cell.addEventListener('click', (e) => handleAttack(e, player2));
   });
