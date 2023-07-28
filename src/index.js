@@ -4,13 +4,15 @@ import Player from './player';
 
 (() => {
   const BOARD_SIZE = 10;
-  const player1 = Player('Player 1', true, BOARD_SIZE);
+  const player1 = Player('Player 1', false, BOARD_SIZE);
   const player2 = Player('Player 2', true, BOARD_SIZE);
-  const player1Heading = document.querySelector('#player-1>h2');
-  const player2Heading = document.querySelector('#player-2>h2');
   let attacker = player1;
   let defender = player2;
 
+  const player1Grid = document.querySelector('#player-1>.grid-container');
+  const player2Grid = document.querySelector('#player-2>.grid-container');
+  const player1Heading = document.querySelector('#player-1>h2');
+  const player2Heading = document.querySelector('#player-1>h2');
   const statusMessage = document.querySelector('#status-message');
 
   const updateStatus = (message) => {
@@ -19,9 +21,24 @@ import Player from './player';
 
   const getCellCoord = (target) => {
     if (!target.classList.contains('grid-cell')) return undefined;
-    const row = target.getAttribute('data-row');
-    const col = target.getAttribute('data-col');
+    const row = +target.getAttribute('data-row');
+    const col = +target.getAttribute('data-col');
     return [row, col];
+  };
+
+  const getCellDOM = (coord, player) => {
+    const [row, col] = coord;
+    const container = player === player1 ? player1Grid : player2Grid;
+    const cellDOM = container.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+    return cellDOM;
+  };
+
+  const checkGameOver = () => {
+    let winner;
+    if (!player1.isAlive()) winner = player2;
+    if (!player2.isAlive()) winner = player1;
+    if (winner === undefined) return false;
+    return true;
   };
 
   const changeTurn = () => {
@@ -40,7 +57,21 @@ import Player from './player';
     if (hitShip === undefined) return;
     if (!hitShip) cell.classList.add('miss');
     if (hitShip) cell.classList.add('hit');
-    changeTurn();
+
+    const gameIsOver = checkGameOver();
+    if (!gameIsOver) changeTurn();
+  };
+
+  const handleAITurn = () => {
+    const target = attacker.getTarget();
+    const cellDOM = getCellDOM(target, defender);
+    const hitShip = defender.board.receiveAttack(target);
+    if (hitShip === undefined) return;
+    if (!hitShip) cellDOM.classList.add('miss');
+    if (hitShip) cellDOM.classList.add('hit');
+
+    const gameIsOver = checkGameOver();
+    if (!gameIsOver) changeTurn();
   };
 
   const initGridDOM = (divId, player) => {
@@ -56,14 +87,16 @@ import Player from './player';
         if (player.board.getCell([i, j]).ship)
           cell.innerText = player.board.getCell([i, j]).ship.key;
 
-        cell.addEventListener('click', (e) => handleAttack(e, player));
-
         grid.appendChild(cell);
       }
     }
   };
 
+  player2.initBoard();
   initGridDOM('#player-1', player1);
   initGridDOM('#player-2', player2);
   updateStatus(`${attacker.name}'s turn`);
+  player2Grid.childNodes.forEach((cell) => {
+    cell.addEventListener('click', (e) => handleAttack(e, player2));
+  });
 })();
