@@ -11,8 +11,11 @@ import Player from './player';
   let attacker = player1;
   let defender = player2;
 
-  player1.initBoard();
-  player2.initBoard();
+  const statusMessage = document.querySelector('#status-message');
+
+  const updateStatus = (message) => {
+    statusMessage.innerText = message;
+  };
 
   const getCellCoord = (target) => {
     if (!target.classList.contains('grid-cell')) return undefined;
@@ -25,6 +28,8 @@ import Player from './player';
     [attacker, defender] = [defender, attacker];
     player1Heading.classList.toggle('current');
     player2Heading.classList.toggle('current');
+    updateStatus(`${attacker.name}'s turn`);
+    if (attacker.isAI) handleAITurn();
   };
 
   const handleAttack = (event, player) => {
@@ -43,7 +48,7 @@ import Player from './player';
     const grid = playerDiv.querySelector('.grid-container');
     for (let i = 0; i < BOARD_SIZE; i += 1) {
       for (let j = 0; j < BOARD_SIZE; j += 1) {
-        const cell = document.createElement('div');
+        const cell = document.createElement('button');
         cell.classList.add('grid-cell');
         cell.setAttribute('data-row', i);
         cell.setAttribute('data-col', j);
@@ -60,4 +65,5 @@ import Player from './player';
 
   initGridDOM('#player-1', player1);
   initGridDOM('#player-2', player2);
+  updateStatus(`${attacker.name}'s turn`);
 })();

@@ -7,15 +7,18 @@
   </head>
   <body>
     <h1>Battleship</h1>
-    <div id="main">
-      <div id="player-1" class="player-container">
-        <h2 class="current">Player 1:</h2>
-        <div class="grid-container"></div>
+    <main class="flex col">
+      <p id="status-message"></p>
+      <div class="flex row">
+        <div id="player-1">
+          <h2 class="current">Player 1:</h2>
+          <div class="grid-container"></div>
+        </div>
+        <div id="player-2">
+          <h2>Player 2:</h2>
+          <div class="grid-container"></div>
+        </div>
       </div>
-      <div id="player-2" class="player-container">
-        <h2>Player 2:</h2>
-        <div class="grid-container"></div>
-      </div>
-    </div>
+    </main>
   </body>
 </html>

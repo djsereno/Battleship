@@ -3,7 +3,7 @@
   box-sizing: border-box;
 }
 
-#main {
+main {
   display: flex;
   justify-content: center;
   gap: 2rem;
@@ -11,6 +11,20 @@
 
 h2.current {
   outline: 3px solid red;
+}
+
+.flex {
+  display: flex;
+  gap: 2rem;
+}
+.flex.col {
+  flex-direction: column;
+  align-items: center;
+}
+
+#status-message {
+  font-size: x-large;
+  font-weight: bold;
 }
 
 .grid-container {
