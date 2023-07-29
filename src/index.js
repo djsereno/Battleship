@@ -1,18 +1,22 @@
 import './normalize.css';
 import './styles.css';
 import Player from './player';
+import { SHIP_KEYS, SHIP_SIZES } from './globals';
 
 (() => {
   const BOARD_SIZE = 10;
+  const GAME_STATES = ['INIT_GAME', 'BOARD_SETUP', 'GAME_ACTIVE', 'GAME_OVER'];
+  let gameState = GAME_STATES[0];
+
   const player1 = Player('Player 1', false, BOARD_SIZE);
   const player2 = Player('Player 2', true, BOARD_SIZE);
   let attacker = player1;
   let defender = player2;
 
-  const player1Grid = document.querySelector('#player-1>.grid-container');
-  const player2Grid = document.querySelector('#player-2>.grid-container');
-  const player1Heading = document.querySelector('#player-1>h2');
-  const player2Heading = document.querySelector('#player-1>h2');
+  const player1Grid = document.querySelector('#player-1 .grid-container');
+  const player2Grid = document.querySelector('#player-2 .grid-container');
+  const player1Heading = document.querySelector('#player-1 h2');
+  const player2Heading = document.querySelector('#player-1 h2');
   const statusMessage = document.querySelector('#status-message');
 
   const updateStatus = (message) => {
@@ -50,6 +54,8 @@ import Player from './player';
   };
 
   const handleAttack = (event, player) => {
+    if (gameState !== 'GAME_ACTIVE') return;
+
     if (player === attacker) return;
     const cell = event.currentTarget;
     const target = getCellCoord(cell);
@@ -60,6 +66,10 @@ import Player from './player';
 
     const gameIsOver = checkGameOver();
     if (!gameIsOver) changeTurn();
+    if (gameIsOver) {
+      updateGameState();
+      endGame();
+    }
   };
 
   const handleAITurn = () => {
@@ -74,28 +84,39 @@ import Player from './player';
     if (!gameIsOver) changeTurn();
   };
 
-  const initGridDOM = (divId, player) => {
-    const playerDiv = document.querySelector(divId);
-    const grid = playerDiv.querySelector('.grid-container');
+  const endGame = () => {
+    updateStatus(`${attacker.name} wins!`);
+  };
+
+  const initGridDOM = (gridDOM, player) => {
     for (let i = 0; i < BOARD_SIZE; i += 1) {
       for (let j = 0; j < BOARD_SIZE; j += 1) {
         const cell = document.createElement('button');
         cell.classList.add('grid-cell');
         cell.setAttribute('data-row', i);
         cell.setAttribute('data-col', j);
-
-        if (player.board.getCell([i, j]).ship)
-          cell.innerText = player.board.getCell([i, j]).ship.key;
-
-        grid.appendChild(cell);
+        gridDOM.appendChild(cell);
       }
     }
   };
 
-  let direction = 'V';
-  let size = 5;
+  const updateGridDOM = (gridDOM, player) => {
+    gridDOM.childNodes.forEach((cellDOM) => {
+      const coord = getCellCoord(cellDOM);
+      if (player.board.getCell(coord).ship) {
+        cellDOM.innerText = player.board.getCell(coord).ship.key;
+        cellDOM.classList.add('ship');
+      }
+    });
+  };
+
+  let shipKey = SHIP_KEYS[0];
+  let size = SHIP_SIZES[shipKey];
+  let direction = 'H';
 
   const previewShipPlacement = (event) => {
+    if (gameState !== 'BOARD_SETUP') return;
+
     const target = event.currentTarget;
     let [row, col] = getCellCoord(target);
     const shipIsValid = player1.board.checkValidShip(size, [row, col], direction);
@@ -121,9 +142,28 @@ import Player from './player';
   };
 
   const rotateShip = (event) => {
-    event.preventDefault();
+    if (gameState !== 'BOARD_SETUP') return;
+
     direction = direction === 'H' ? 'V' : 'H';
     previewShipPlacement(event);
+  };
+
+  const placeShip = (event) => {
+    if (gameState !== 'BOARD_SETUP') return;
+
+    const target = event.currentTarget;
+    const coord = getCellCoord(target);
+    const valid = player1.board.placeShip(shipKey, coord, direction);
+    if (!valid) return false;
+
+    updateGridDOM(player1Grid, player1);
+
+    if (shipKey === SHIP_KEYS.slice(-1)[0]) {
+      updateGameState();
+      return;
+    }
+    shipKey = SHIP_KEYS[SHIP_KEYS.indexOf(shipKey) + 1];
+    size = SHIP_SIZES[shipKey];
   };
 
   const clearPreview = () => {
@@ -131,17 +171,34 @@ import Player from './player';
     cells.forEach((cell) => cell.classList.remove('preview', 'valid', 'invalid'));
   };
 
-  player2.initBoard();
-  initGridDOM('#player-1', player1);
-  initGridDOM('#player-2', player2);
-  updateStatus(`${attacker.name}'s turn`);
+  const initGame = () => {
+    player2.initBoard();
+    updateGridDOM(player2Grid, player2);
+    updateStatus(`${attacker.name}'s turn`);
 
+    updateGameState();
+  };
+
+  const updateGameState = () => {
+    if (gameState === GAME_STATES.slice(-1)[0]) {
+      [gameState] = GAME_STATES;
+    } else {
+      gameState = GAME_STATES[GAME_STATES.indexOf(gameState) + 1];
+    }
+  };
+
+  document.querySelector('body').addEventListener('contextmenu', (e) => e.preventDefault());
+  initGridDOM(player1Grid, player1);
+  initGridDOM(player2Grid, player2);
   player1Grid.addEventListener('mouseleave', clearPreview);
   player1Grid.childNodes.forEach((cell) => {
-    cell.addEventListener('mouseover', (e) => previewShipPlacement(e));
-    cell.addEventListener('contextmenu', (e) => rotateShip(e));
+    cell.addEventListener('mouseover', previewShipPlacement);
+    cell.addEventListener('contextmenu', rotateShip);
+    cell.addEventListener('click', placeShip);
   });
   player2Grid.childNodes.forEach((cell) => {
     cell.addEventListener('click', (e) => handleAttack(e, player2));
   });
+
+  initGame();
 })();
