@@ -7,6 +7,7 @@ import { SHIP_KEYS, SHIP_SIZES } from './globals';
   const BOARD_SIZE = 10;
   const GAME_STATES = ['INIT_GAME', 'BOARD_SETUP', 'GAME_ACTIVE', 'GAME_OVER'];
   let gameState = GAME_STATES[0];
+  document.documentElement.style.setProperty('--board-size', BOARD_SIZE);
 
   const player1 = Player('Player 1', false, BOARD_SIZE);
   const player2 = Player('Player 2', true, BOARD_SIZE);
@@ -73,6 +74,8 @@ import { SHIP_KEYS, SHIP_SIZES } from './globals';
   };
 
   const handleAITurn = () => {
+    if (gameState !== 'GAME_ACTIVE') return;
+
     const target = attacker.getTarget();
     const cellDOM = getCellDOM(target, defender);
     const hitShip = defender.board.receiveAttack(target);
@@ -82,13 +85,17 @@ import { SHIP_KEYS, SHIP_SIZES } from './globals';
 
     const gameIsOver = checkGameOver();
     if (!gameIsOver) changeTurn();
+    if (gameIsOver) {
+      updateGameState();
+      endGame();
+    }
   };
 
   const endGame = () => {
     updateStatus(`${attacker.name} wins!`);
   };
 
-  const initGridDOM = (gridDOM, player) => {
+  const initGridDOM = (gridDOM) => {
     for (let i = 0; i < BOARD_SIZE; i += 1) {
       for (let j = 0; j < BOARD_SIZE; j += 1) {
         const cell = document.createElement('button');
@@ -164,6 +171,7 @@ import { SHIP_KEYS, SHIP_SIZES } from './globals';
     }
     shipKey = SHIP_KEYS[SHIP_KEYS.indexOf(shipKey) + 1];
     size = SHIP_SIZES[shipKey];
+    return true;
   };
 
   const clearPreview = () => {
@@ -188,8 +196,8 @@ import { SHIP_KEYS, SHIP_SIZES } from './globals';
   };
 
   document.querySelector('body').addEventListener('contextmenu', (e) => e.preventDefault());
-  initGridDOM(player1Grid, player1);
-  initGridDOM(player2Grid, player2);
+  initGridDOM(player1Grid);
+  initGridDOM(player2Grid);
   player1Grid.addEventListener('mouseleave', clearPreview);
   player1Grid.childNodes.forEach((cell) => {
     cell.addEventListener('mouseover', previewShipPlacement);
