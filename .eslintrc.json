@@ -25,6 +25,7 @@
     "jest/no-identical-title": "error",
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error",
-    "no-use-before-define": "warn"
+    "no-use-before-define": "warn",
+    "no-param-reassign": ["error", { "props": false }]
   }
 }

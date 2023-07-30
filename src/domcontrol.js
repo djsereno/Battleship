@@ -35,7 +35,41 @@ const DOMControl = (player1, player2, stateMachine) => {
     updateStatus(`${newAttacker.name}'s turn`);
   };
 
-  const updateCellStyle = (coord, defender, hitShip) => {
+  const initGridDOMs = (boardSize) => {
+    document.querySelector('body').addEventListener('contextmenu', (e) => e.preventDefault());
+    document.documentElement.style.setProperty('--board-size', boardSize);
+    [player1Grid, player2Grid].forEach((gridDOM) => {
+      for (let i = 0; i < boardSize; i += 1) {
+        for (let j = 0; j < boardSize; j += 1) {
+          const cell = document.createElement('button');
+          cell.classList.add('grid-cell');
+          cell.setAttribute('data-row', i);
+          cell.setAttribute('data-col', j);
+          gridDOM.appendChild(cell);
+        }
+      }
+    });
+  };
+
+  const updateGridDOM = (player) => {
+    const gridDOM = player === player1 ? player1Grid : player2Grid;
+    gridDOM.childNodes.forEach((cellDOM) => {
+      const coord = getCellCoord(cellDOM);
+      if (player.board.getCell(coord).ship) {
+        cellDOM.innerText = player.board.getCell(coord).ship.key;
+        cellDOM.classList.add('ship');
+      }
+    });
+  };
+
+  const clearPreview = () => {
+    if (!stateMachine.isSetupActive()) return;
+
+    const cells = player1Grid.querySelectorAll('.preview');
+    cells.forEach((cell) => cell.classList.remove('preview', 'valid', 'invalid'));
+  };
+
+  const addHitOrMissStyle = (coord, defender, hitShip) => {
     const cell = getCellDOM(coord, defender);
     if (!hitShip) cell.classList.add('miss');
     if (hitShip) cell.classList.add('hit');
@@ -93,13 +127,6 @@ const DOMControl = (player1, player2, stateMachine) => {
     size = SHIP_SIZES[shipKey];
   };
 
-  const clearPreview = () => {
-    if (!stateMachine.isSetupActive()) return;
-
-    const cells = player1Grid.querySelectorAll('.preview');
-    cells.forEach((cell) => cell.classList.remove('preview', 'valid', 'invalid'));
-  };
-
   const initEventHandlers = (handleAttack) => {
     player1Grid.addEventListener('mouseleave', clearPreview);
     player1Grid.childNodes.forEach((cell) => {
@@ -112,33 +139,6 @@ const DOMControl = (player1, player2, stateMachine) => {
     });
   };
 
-  const initGridDOMs = (boardSize) => {
-    document.querySelector('body').addEventListener('contextmenu', (e) => e.preventDefault());
-    document.documentElement.style.setProperty('--board-size', boardSize);
-    [player1Grid, player2Grid].forEach((gridDOM) => {
-      for (let i = 0; i < boardSize; i += 1) {
-        for (let j = 0; j < boardSize; j += 1) {
-          const cell = document.createElement('button');
-          cell.classList.add('grid-cell');
-          cell.setAttribute('data-row', i);
-          cell.setAttribute('data-col', j);
-          gridDOM.appendChild(cell);
-        }
-      }
-    });
-  };
-
-  const updateGridDOM = (player) => {
-    const gridDOM = player === player1 ? player1Grid : player2Grid;
-    gridDOM.childNodes.forEach((cellDOM) => {
-      const coord = getCellCoord(cellDOM);
-      if (player.board.getCell(coord).ship) {
-        cellDOM.innerText = player.board.getCell(coord).ship.key;
-        cellDOM.classList.add('ship');
-      }
-    });
-  };
-
   return {
     initGridDOMs,
     initEventHandlers,
@@ -146,7 +146,7 @@ const DOMControl = (player1, player2, stateMachine) => {
     updateStatus,
     updateAttacker,
     getCellCoord,
-    updateCellStyle,
+    addHitOrMissStyle,
   };
 };
 
