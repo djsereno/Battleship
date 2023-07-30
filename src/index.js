@@ -25,41 +25,25 @@ import StateMachine from './statemachine';
     domControl.updateStatus(`${attacker.name} wins!`);
   };
 
-  const handleAITurn = () => {
-    if (!stateMachine.isGameActive()) return;
-
-    const target = attacker.getTarget();
-    const hitShip = defender.board.receiveAttack(target);
-    if (hitShip === undefined) return;
-    domControl.addHitOrMissStyle(target, defender, hitShip);
-
-    const gameIsOver = checkGameOver();
-    if (!gameIsOver) changeTurn();
-    if (gameIsOver) {
-      stateMachine.updateState();
-      endGame();
-    }
-  };
-
   const changeTurn = () => {
     [attacker, defender] = [defender, attacker];
     domControl.updateAttacker(attacker);
-    if (attacker.isAI) handleAITurn();
+    if (attacker.isAI) handleAttack(attacker.getTarget(), defender);
   };
 
-  const handleAttack = (event, player) => {
-    if (!stateMachine.isGameActive() || player === attacker) return;
+  const handleAttack = (targetCoords, player) => {
+    if (!stateMachine.isGameActive()) return;
 
-    const target = domControl.getCellCoord(event.currentTarget);
-    const hitShip = player.board.receiveAttack(target);
+    const hitShip = player.board.receiveAttack(targetCoords);
     if (hitShip === undefined) return;
-    domControl.addHitOrMissStyle(target, defender, hitShip);
+    domControl.addHitOrMissStyle(targetCoords, player, hitShip);
 
     const gameIsOver = checkGameOver();
-    if (!gameIsOver) changeTurn();
     if (gameIsOver) {
       stateMachine.updateState();
       endGame();
+    } else {
+      changeTurn();
     }
   };
 

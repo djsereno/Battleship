@@ -69,8 +69,8 @@ const DOMControl = (player1, player2, stateMachine) => {
     cells.forEach((cell) => cell.classList.remove('preview', 'valid', 'invalid'));
   };
 
-  const addHitOrMissStyle = (coord, defender, hitShip) => {
-    const cell = getCellDOM(coord, defender);
+  const addHitOrMissStyle = (targetCoords, defender, hitShip) => {
+    const cell = getCellDOM(targetCoords, defender);
     if (!hitShip) cell.classList.add('miss');
     if (hitShip) cell.classList.add('hit');
   };
@@ -135,7 +135,10 @@ const DOMControl = (player1, player2, stateMachine) => {
       cell.addEventListener('click', placeShip);
     });
     player2Grid.childNodes.forEach((cell) => {
-      cell.addEventListener('click', (e) => handleAttack(e, player2));
+      cell.addEventListener('click', (e) => {
+        const targetCoords = getCellCoord(e.currentTarget);
+        handleAttack(targetCoords, player2);
+      });
     });
   };
 
