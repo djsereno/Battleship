@@ -17,6 +17,10 @@ h2.current {
   outline: 3px solid red;
 }
 
+.hidden {
+  display: none;
+}
+
 .flex {
   display: flex;
   gap: 2rem;

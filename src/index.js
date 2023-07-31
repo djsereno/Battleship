@@ -6,8 +6,8 @@ import StateMachine from './statemachine';
 
 (() => {
   const BOARD_SIZE = 10;
-  const player1 = Player('Player 1', false, BOARD_SIZE);
-  const player2 = Player('Player 2', true, BOARD_SIZE);
+  let player1 = Player('Player 1', false, BOARD_SIZE);
+  let player2 = Player('Player 2', true, BOARD_SIZE);
   let attacker = player1;
   let defender = player2;
   const stateMachine = StateMachine();
@@ -23,12 +23,7 @@ import StateMachine from './statemachine';
 
   const endGame = () => {
     domControl.updateStatus(`${attacker.name} wins!`);
-  };
-
-  const changeTurn = () => {
-    [attacker, defender] = [defender, attacker];
-    domControl.updateAttacker(attacker);
-    if (attacker.isAI) handleAttack(attacker.getTarget(), defender);
+    domControl.toggleNewGameBtn();
   };
 
   const handleAttack = (targetCoords, player) => {
@@ -43,12 +38,32 @@ import StateMachine from './statemachine';
       stateMachine.updateState();
       endGame();
     } else {
-      changeTurn();
+      changeTurn(); // eslint-disable-line no-use-before-define
     }
   };
 
+  const changeTurn = () => {
+    [attacker, defender] = [defender, attacker];
+    domControl.updateAttacker(attacker);
+    if (attacker.isAI) handleAttack(attacker.getTarget(), defender);
+  };
+
+  const startNewGame = () => {
+    stateMachine.startNewGame();
+    player1 = Player('Player 1', false, BOARD_SIZE);
+    player2 = Player('Player 2', true, BOARD_SIZE);
+    attacker = player1;
+    defender = player2;
+    player2.initBoard();
+    domControl.toggleNewGameBtn();
+    domControl.resetGame(player1, player2);
+    domControl.updateGridDOM(player2);
+    domControl.updateStatus(`${attacker.name}'s turn`);
+    stateMachine.updateState();
+  };
+
   const initGame = () => {
-    domControl.initGridDOMs(BOARD_SIZE);
+    domControl.initDOM(BOARD_SIZE, startNewGame);
     domControl.initEventHandlers(handleAttack);
     player2.initBoard();
     domControl.updateGridDOM(player2);

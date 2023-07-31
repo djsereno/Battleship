@@ -1,15 +1,24 @@
 import { SHIP_KEYS, SHIP_SIZES } from './globals';
 
-const DOMControl = (player1, player2, stateMachine) => {
+const DOMControl = (playerOne, playerTwo, stateMachine) => {
   const player1Grid = document.querySelector('#player-1 .grid-container');
   const player2Grid = document.querySelector('#player-2 .grid-container');
   const player1Heading = document.querySelector('#player-1 h2');
   const player2Heading = document.querySelector('#player-1 h2');
   const statusMessage = document.querySelector('#status-message');
+  const newGameButton = document.querySelector('#new-game-btn');
 
-  let shipKey = SHIP_KEYS[0];
-  let size = SHIP_SIZES[shipKey];
-  let direction = 'H';
+  let shipKey;
+  let size;
+  let direction;
+  let player1 = playerOne;
+  let player2 = playerTwo;
+
+  const initPlaceShipVars = () => {
+    [shipKey] = SHIP_KEYS;
+    size = SHIP_SIZES[shipKey];
+    direction = 'H';
+  };
 
   const getCellDOM = (coord, player) => {
     const [row, col] = coord;
@@ -35,9 +44,11 @@ const DOMControl = (player1, player2, stateMachine) => {
     updateStatus(`${newAttacker.name}'s turn`);
   };
 
-  const initGridDOMs = (boardSize) => {
-    document.querySelector('body').addEventListener('contextmenu', (e) => e.preventDefault());
+  const initDOM = (boardSize, startNewGame) => {
     document.documentElement.style.setProperty('--board-size', boardSize);
+    document.querySelector('body').addEventListener('contextmenu', (e) => e.preventDefault());
+    newGameButton.addEventListener('click', startNewGame);
+
     [player1Grid, player2Grid].forEach((gridDOM) => {
       for (let i = 0; i < boardSize; i += 1) {
         for (let j = 0; j < boardSize; j += 1) {
@@ -67,6 +78,16 @@ const DOMControl = (player1, player2, stateMachine) => {
 
     const cells = player1Grid.querySelectorAll('.preview');
     cells.forEach((cell) => cell.classList.remove('preview', 'valid', 'invalid'));
+  };
+
+  const resetGame = (newPlayer1, newPlayer2) => {
+    [player1, player2] = [newPlayer1, newPlayer2];
+    const cells = document.querySelectorAll('.grid-cell');
+    cells.forEach((cell) => {
+      cell.classList.remove('ship', 'miss', 'hit');
+      cell.innerText = '';
+    });
+    initPlaceShipVars();
   };
 
   const addHitOrMissStyle = (targetCoords, defender, hitShip) => {
@@ -142,14 +163,22 @@ const DOMControl = (player1, player2, stateMachine) => {
     });
   };
 
+  const toggleNewGameBtn = () => {
+    newGameButton.classList.toggle('hidden');
+  };
+
+  initPlaceShipVars();
+
   return {
-    initGridDOMs,
+    initDOM,
     initEventHandlers,
+    toggleNewGameBtn,
     updateGridDOM,
     updateStatus,
     updateAttacker,
     getCellCoord,
     addHitOrMissStyle,
+    resetGame,
   };
 };
 
