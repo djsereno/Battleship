@@ -2,7 +2,7 @@ const SHIP_KEYS = ['CAR', 'BAT', 'CRU', 'SUB', 'DES'];
 const SHIP_NAMES = {
   CAR: 'Carrier',
   BAT: 'Battleship',
-  CRU: 'Cruise',
+  CRU: 'Cruiser',
   SUB: 'Submarine',
   DES: 'Destroyer',
 };

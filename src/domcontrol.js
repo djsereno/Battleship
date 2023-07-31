@@ -56,6 +56,26 @@ const DOMControl = (playerOne, playerTwo, stateMachine) => {
           cell.classList.add('grid-cell');
           cell.setAttribute('data-row', i);
           cell.setAttribute('data-col', j);
+
+          const topLeftCrosshair = document.createElement('span');
+          topLeftCrosshair.classList.add('crosshair', 'top-left');
+          cell.appendChild(topLeftCrosshair);
+
+          if (j === boardSize - 1) {
+            const topRightCrosshair = document.createElement('span');
+            topRightCrosshair.classList.add('crosshair', 'top-right');
+            cell.appendChild(topRightCrosshair);
+          }
+          if (i === boardSize - 1) {
+            const botLeftCrosshair = document.createElement('span');
+            botLeftCrosshair.classList.add('crosshair', 'bot-left');
+            cell.appendChild(botLeftCrosshair);
+          }
+          if (i === boardSize - 1 && j === boardSize - 1) {
+            const botRightCrosshair = document.createElement('span');
+            botRightCrosshair.classList.add('crosshair', 'bot-right');
+            cell.appendChild(botRightCrosshair);
+          }
           gridDOM.appendChild(cell);
         }
       }
@@ -67,7 +87,7 @@ const DOMControl = (playerOne, playerTwo, stateMachine) => {
     gridDOM.childNodes.forEach((cellDOM) => {
       const coord = getCellCoord(cellDOM);
       if (player.board.getCell(coord).ship) {
-        cellDOM.innerText = player.board.getCell(coord).ship.key;
+        // cellDOM.innerText = player.board.getCell(coord).ship.key;
         cellDOM.classList.add('ship');
       }
     });
@@ -85,7 +105,7 @@ const DOMControl = (playerOne, playerTwo, stateMachine) => {
     const cells = document.querySelectorAll('.grid-cell');
     cells.forEach((cell) => {
       cell.classList.remove('ship', 'miss', 'hit');
-      cell.innerText = '';
+      // cell.innerText = '';
     });
     initPlaceShipVars();
   };
