@@ -64,16 +64,20 @@ main {
   min-width: 500px;
   border: 1px solid;
   user-select: none;
+  outline: 4px solid;
+  outline-offset: 6px;
 }
 
 #player-1 .grid-container,
 #player-1 .grid-cell {
   border-color: var(--clr-player1-primary);
+  outline-color: var(--clr-player1-primary);
 }
 
 #player-2 .grid-container,
 #player-2 .grid-cell {
   border-color: var(--clr-player2-primary);
+  outline-color: var(--clr-player2-primary);
 }
 
 .grid-cell {
@@ -142,4 +146,43 @@ main {
 }
 #player-2 .grid-cell > span {
   border-color: var(--clr-player2-primary);
+}
+
+.grid-and-ticks {
+  position: relative;
+}
+.ticks .minor {
+  width: 100%;
+  height: 6px;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 2px, transparent 2px);
+  background-size: 2%;
+}
+.ticks .major {
+  width: 100%;
+  height: 3px;
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 2px, transparent 2px);
+  background-size: 10%;
+}
+.ticks.left {
+  position: absolute;
+  width: 100%;
+  transform-origin: top left;
+  top: 0;
+  left: 0;
+  transform: rotate(90deg) scaleY(-1) translateY(-25px);
+}
+.ticks.right {
+  position: absolute;
+  width: 100%;
+  transform-origin: top right;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg) scaleY(-1) translateY(-25px);
+}
+.ticks.top {
+  margin-bottom: 15px;
+}
+.ticks.bot {
+  margin-top: 15px;
+  transform: scaleY(-1);
 }
