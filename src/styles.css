@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
 * {
   margin: 0;
   box-sizing: border-box;
@@ -8,6 +10,7 @@
   --cell-border-size: 1px;
   --clr-player1-primary: #094a81;
   --clr-player2-primary: #f9632e;
+  --clr-banner: #fe7d17;
   --clr-hit: #e4959b;
   --clr-ship: #4697c4;
   --clr-miss: #c7c7c7;
@@ -16,6 +19,7 @@
 body {
   min-height: 100dvh;
   background-size: cover;
+  font-family: 'Ubuntu', sans-serif;
   background-image: url('./images/background.jpg');
 }
 
@@ -43,6 +47,17 @@ main {
   font-weight: bold;
 }
 
+.player-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  background-color: var(--clr-banner);
+  color: white;
+  margin-bottom: 2rem;
+  height: 1.5em;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(var(--board-size), 1fr);
@@ -62,9 +77,6 @@ main {
 }
 
 .grid-cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
   border: var(--cell-border-size) solid;
   background-color: rgba(255, 255, 255, 0.6);
@@ -84,12 +96,18 @@ main {
 .grid-cell.preview.valid {
   background-color: rgb(165, 255, 165);
 }
-.grid-cell.preview.invalid,
+.grid-cell.preview.invalid {
+  background-color: color-mix(in srgb, var(--clr-hit) 80%, transparent);
+}
 .grid-cell.hit {
   background-color: color-mix(in srgb, var(--clr-hit) 80%, transparent);
+  background-size: cover;
+  background-image: url('./images/marker-hit.png');
 }
 .grid-cell.miss {
   background-color: color-mix(in srgb, var(--clr-miss) 80%, transparent);
+  background-size: cover;
+  background-image: url('./images/marker-miss.png');
 }
 
 /* GRID CELL CROSS HAIRS */
