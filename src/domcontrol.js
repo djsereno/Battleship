@@ -58,24 +58,18 @@ const DOMControl = (playerOne, playerTwo, stateMachine) => {
           cell.setAttribute('data-col', j);
 
           const topLeftCrosshair = document.createElement('span');
-          topLeftCrosshair.classList.add('crosshair', 'top-left');
+          const topRightCrosshair = document.createElement('span');
+          const botLeftCrosshair = document.createElement('span');
+          const botRightCrosshair = document.createElement('span');
+          topLeftCrosshair.classList.add('crosshair', 'top', 'left');
+          topRightCrosshair.classList.add('crosshair', 'top', 'right');
+          botLeftCrosshair.classList.add('crosshair', 'bot', 'left');
+          botRightCrosshair.classList.add('crosshair', 'bot', 'right');
           cell.appendChild(topLeftCrosshair);
+          cell.appendChild(topRightCrosshair);
+          cell.appendChild(botLeftCrosshair);
+          cell.appendChild(botRightCrosshair);
 
-          if (j === boardSize - 1) {
-            const topRightCrosshair = document.createElement('span');
-            topRightCrosshair.classList.add('crosshair', 'top-right');
-            cell.appendChild(topRightCrosshair);
-          }
-          if (i === boardSize - 1) {
-            const botLeftCrosshair = document.createElement('span');
-            botLeftCrosshair.classList.add('crosshair', 'bot-left');
-            cell.appendChild(botLeftCrosshair);
-          }
-          if (i === boardSize - 1 && j === boardSize - 1) {
-            const botRightCrosshair = document.createElement('span');
-            botRightCrosshair.classList.add('crosshair', 'bot-right');
-            cell.appendChild(botRightCrosshair);
-          }
           gridDOM.appendChild(cell);
         }
       }

@@ -6,6 +6,11 @@
 :root {
   --board-size: 10;
   --cell-border-size: 1px;
+  --clr-player1-primary: #094a81;
+  --clr-player2-primary: #f9632e;
+  --clr-hit: #e4959b;
+  --clr-ship: #4697c4;
+  --clr-miss: #c7c7c7;
 }
 
 body {
@@ -48,19 +53,12 @@ main {
 
 #player-1 .grid-container,
 #player-1 .grid-cell {
-  border-color: rgb(37, 58, 133, 0.6);
+  border-color: var(--clr-player1-primary);
 }
-#player-1 .grid-cell > span::before,
-#player-1 .grid-cell > span::after {
-  border-color: rgb(37, 58, 133, 0.8);
-}
+
 #player-2 .grid-container,
 #player-2 .grid-cell {
-  border-color: rgba(248, 48, 48, 0.6);
-}
-#player-2 .grid-cell > span::before,
-#player-2 .grid-cell > span::after {
-  border-color: rgba(248, 48, 48, 0.8);
+  border-color: var(--clr-player2-primary);
 }
 
 .grid-cell {
@@ -73,7 +71,6 @@ main {
   background-image: linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 33% 33%;
-  /* font-size: small; */
   aspect-ratio: 1;
 }
 
@@ -82,85 +79,49 @@ main {
   cursor: pointer;
 }
 .grid-cell.ship {
-  background-color: rgb(165, 165, 255);
+  background-color: color-mix(in srgb, var(--clr-ship) 80%, transparent);
 }
 .grid-cell.preview.valid {
   background-color: rgb(165, 255, 165);
 }
 .grid-cell.preview.invalid,
 .grid-cell.hit {
-  background-color: rgb(255, 165, 165);
+  background-color: color-mix(in srgb, var(--clr-hit) 80%, transparent);
 }
 .grid-cell.miss {
-  background-color: rgb(74, 74, 74);
+  background-color: color-mix(in srgb, var(--clr-miss) 80%, transparent);
 }
 
 /* GRID CELL CROSS HAIRS */
-.grid-cell span.crosshair::before,
-.grid-cell span.crosshair::after {
+.grid-cell span.crosshair {
   content: '';
   position: absolute;
   width: var(--length);
   height: var(--length);
   --thickness: 4px;
-  --length: 16px;
-  --long-offset: calc(var(--cell-border-size) + var(--length) / 2);
-  --trans-offset: calc(var(--cell-border-size) + var(--thickness) / 2);
+  --length: 10px;
+  --offset: calc(var(--thickness) / -2 - var(--cell-border-size));
+  z-index: 1;
 }
-.grid-cell[data-col='0'] span::before,
-.grid-cell span.top-right::before,
-.grid-cell span.bot-right::before {
-  width: calc(var(--length) / 2 + var(--thickness) / 2);
-}
-.grid-cell[data-row='0'] span::after,
-.grid-cell span.bot-left::after,
-.grid-cell span.bot-right::after {
-  height: calc(var(--length) / 2 + var(--thickness) / 2);
-}
-/* HORIZONTAL CROSS HAIRS */
-.grid-cell span.top-left::before,
-.grid-cell span.top-right::before {
-  top: calc(-1 * var(--trans-offset));
+.grid-cell span.crosshair.top {
   border-top: var(--thickness) solid;
+  top: var(--offset);
 }
-.grid-cell span.bot-left::before,
-.grid-cell span.bot-right::before {
-  bottom: calc(-1 * var(--trans-offset));
+.grid-cell span.crosshair.bot {
   border-bottom: var(--thickness) solid;
+  bottom: var(--offset);
 }
-.grid-cell span.top-left::before,
-.grid-cell span.bot-left::before {
-  left: calc(-1 * var(--long-offset));
-}
-/* VERTICAL CROSS HAIRS */
-.grid-cell span.top-left::after,
-.grid-cell span.bot-left::after {
-  left: calc(-1 * var(--trans-offset));
+.grid-cell span.crosshair.left {
   border-left: var(--thickness) solid;
+  left: var(--offset);
 }
-.grid-cell span.top-right::after,
-.grid-cell span.bot-right::after {
-  right: calc(-1 * var(--trans-offset));
+.grid-cell span.crosshair.right {
   border-right: var(--thickness) solid;
+  right: var(--offset);
 }
-.grid-cell span.top-left::after,
-.grid-cell span.top-right::after {
-  top: calc(-1 * var(--long-offset));
+#player-1 .grid-cell > span {
+  border-color: var(--clr-player1-primary);
 }
-/* CORNER CROSS HAIRS */
-.grid-cell[data-col='0'] span.top-left::before,
-.grid-cell[data-col='0'] span.bot-left::before {
-  left: calc(-1 * var(--cell-border-size) - var(--thickness) / 2);
-}
-.grid-cell[data-row='0'] span.top-left::after,
-.grid-cell[data-row='0'] span.top-right::after {
-  top: calc(-1 * var(--cell-border-size) - var(--thickness) / 2);
-}
-.grid-cell span.bot-left::after,
-.grid-cell span.bot-right::after {
-  bottom: calc(-1 * var(--cell-border-size) - var(--thickness) / 2);
-}
-.grid-cell span.top-right::before,
-.grid-cell span.bot-right::before {
-  right: calc(-1 * var(--cell-border-size) - var(--thickness) / 2);
+#player-2 .grid-cell > span {
+  border-color: var(--clr-player2-primary);
 }
